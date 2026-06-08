@@ -1,5 +1,3 @@
-Файл 6 з 57
-Назва файлу яку вписуєш у GitHub: docs/ADAPTER_STANDARD.md
 # Solana Yield Adapter Standard — Specification v0.1
 
 > **Status:** Draft
