@@ -1,0 +1,59 @@
+[toolchain]
+anchor_version = "0.31.1"
+solana_version = "2.2.20"
+[features]
+seeds = true
+skip-lint = false
+[programs.localnet]
+yield_dispatcher = "YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX"
+adapter_registry = "AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+kamino_usdc_adapter = "KAdPtKAmInOUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+marginfi_usdc_adapter = "MAdPtMaRGInFiUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+jupiter_lp_adapter = "JAdPtJuPiTeRLPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+maple_syrup_adapter = "MAdPtMaPlEsYrUpXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+drift_insurance_adapter = "DAdPtDrIfTiNsFuNdXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+[programs.devnet]
+yield_dispatcher = "YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX"
+adapter_registry = "AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+kamino_usdc_adapter = "KAdPtKAmInOUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+marginfi_usdc_adapter = "MAdPtMaRGInFiUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+jupiter_lp_adapter = "JAdPtJuPiTeRLPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+maple_syrup_adapter = "MAdPtMaPlEsYrUpXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+drift_insurance_adapter = "DAdPtDrIfTiNsFuNdXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+[registry]
+url = "https://api.apr.dev"
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+[scripts]
+test = "yarn ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+deploy-devnet = "anchor deploy --provider.cluster devnet"
+verify = "anchor verify"
+[test]
+startup_wait = 5000
+[test.validator]
+url = "https://api.mainnet-beta.solana.com"
+[[test.validator.clone]]
+address = "KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD"
+[[test.validator.clone]]
+address = "7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"
+[[test.validator.clone]]
+address = "D6q6wuQSriferjmtEkLeX43LchH4ix3raHmkX9W3LQba"
+[[test.validator.clone]]
+address = "FBSyPnxtHKLBZ4UeeUyAnbtFuAmTHLtso9YtsqRDRWkB"
+[[test.validator.clone]]
+address = "MFv2hWf31Z9kbCa1snEPdcgX6CAm7cDpSvtVkGX3H5a"
+[[test.validator.clone]]
+address = "2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"
+[[test.validator.clone]]
+address = "PERPHjGBqRHArX4DySjwM6UJHiR3sWAatqfdBS2qQJu"
+[[test.validator.clone]]
+address = "5BUwFW4nRbftYTDMbgxykoFWqWHPzahFSNAaaaJtVKsq"
+[[test.validator.clone]]
+address = "27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4"
+[[test.validator.clone]]
+address = "dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH"
+[[test.validator.clone]]
+address = "4aGc3mVgZTSX6qWMi4CBZpqiEzqH5DPbAuCkQKbhkCib"
+[[test.validator.clone]]
+address = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
