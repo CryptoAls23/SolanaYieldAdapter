@@ -50,7 +50,7 @@ jobs:
           # 1. Замінюємо лінк на твій Helius RPC в Anchor.toml
           sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
           
-          # 2. Безпечний цикл заміни заглушок (захищений від розривів рядків)
+          # 2. Цикл заміни заглушок в УСІХ файлах (і в коді, і в конфігу Anchor.toml)
           for item in \
             "YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX:Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" \
             "AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH" \
@@ -62,7 +62,10 @@ jobs:
           do
             FROM=$(echo "$item" | cut -d':' -f1)
             TO=$(echo "$item" | cut -d':' -f2)
+            # Чистимо всередині Rust-файлів
             find programs/ -name "*.rs" -exec sed -i "s|$FROM|$TO|g" {} +
+            # Обов'язково чистимо всередині Anchor.toml
+            sed -i "s|$FROM|$TO|g" Anchor.toml
           done
           
           # 3. Запускаємо тест
