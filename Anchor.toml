@@ -1,38 +1,47 @@
 [toolchain]
 anchor_version = "0.31.1"
 solana_version = "2.2.20"
+
 [features]
 seeds = true
 skip-lint = false
+
 [programs.localnet]
-yield_dispatcher = "YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX"
-adapter_registry = "AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-kamino_usdc_adapter = "KAdPtKAmInOUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-marginfi_usdc_adapter = "MAdPtMaRGInFiUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-jupiter_lp_adapter = "JAdPtJuPiTeRLPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-maple_syrup_adapter = "MAdPtMaPlEsYrUpXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-drift_insurance_adapter = "DAdPtDrIfTiNsFuNdXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+yield_dispatcher = "Dispatcher1111111111111111111111111111111111"
+adapter_registry = "Registry11111111111111111111111111111111111"
+kamino_usdc_adapter = "KaminoAdpt111111111111111111111111111111111"
+marginfi_usdc_adapter = "MarginfiAdpt11111111111111111111111111111"
+jupiter_lp_adapter = "JupiterAdpt1111111111111111111111111111111"
+maple_syrup_adapter = "MapleAdpt111111111111111111111111111111111"
+drift_insurance_adapter = "DriftAdpt111111111111111111111111111111111"
+
 [programs.devnet]
-yield_dispatcher = "YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX"
-adapter_registry = "AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-kamino_usdc_adapter = "KAdPtKAmInOUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-marginfi_usdc_adapter = "MAdPtMaRGInFiUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-jupiter_lp_adapter = "JAdPtJuPiTeRLPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-maple_syrup_adapter = "MAdPtMaPlEsYrUpXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-drift_insurance_adapter = "DAdPtDrIfTiNsFuNdXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+yield_dispatcher = "Dispatcher1111111111111111111111111111111111"
+adapter_registry = "Registry11111111111111111111111111111111111"
+kamino_usdc_adapter = "KaminoAdpt111111111111111111111111111111111"
+marginfi_usdc_adapter = "MarginfiAdpt11111111111111111111111111111"
+jupiter_lp_adapter = "JupiterAdpt1111111111111111111111111111111"
+maple_syrup_adapter = "MapleAdpt111111111111111111111111111111111"
+drift_insurance_adapter = "DriftAdpt111111111111111111111111111111111"
+
 [registry]
 url = "https://api.apr.dev"
+
 [provider]
 cluster = "localnet"
 wallet = "~/.config/solana/id.json"
+
 [scripts]
 test = "yarn ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 deploy-devnet = "anchor deploy --provider.cluster devnet"
 verify = "anchor verify"
+
 [test]
-startup_wait = 5000
+startup_wait = 10000
+
 [test.validator]
 url = "https://api.mainnet-beta.solana.com"
+
 [[test.validator.clone]]
 address = "KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD"
 [[test.validator.clone]]
