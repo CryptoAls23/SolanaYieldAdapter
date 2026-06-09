@@ -7,22 +7,22 @@ seeds = true
 skip-lint = false
 
 [programs.localnet]
-yield_dispatcher = "Dispatcher1111111111111111111111111111111111"
-adapter_registry = "Registry11111111111111111111111111111111111"
-kamino_usdc_adapter = "KaminoAdpt111111111111111111111111111111111"
-marginfi_usdc_adapter = "MarginfiAdpt11111111111111111111111111111"
-jupiter_lp_adapter = "JupiterAdpt1111111111111111111111111111111"
-maple_syrup_adapter = "MapleAdpt111111111111111111111111111111111"
-drift_insurance_adapter = "DriftAdpt111111111111111111111111111111111"
+yield_dispatcher = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+adapter_registry = "SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH"
+kamino_usdc_adapter = "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+marginfi_usdc_adapter = "4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA"
+jupiter_lp_adapter = "7xKXtg2CW87d97TXJSDpbN5jPidns1G1dvWodJWdqbF9"
+maple_syrup_adapter = "9W52Y2gZonevPaFwN98mD3A9wLYs7uVebT6f7vSu7qfE"
+drift_insurance_adapter = "MNDEFsaZbJv516pvc64Jv9wzN7v56mSuaKEx8Gr8R6f"
 
 [programs.devnet]
-yield_dispatcher = "Dispatcher1111111111111111111111111111111111"
-adapter_registry = "Registry11111111111111111111111111111111111"
-kamino_usdc_adapter = "KaminoAdpt111111111111111111111111111111111"
-marginfi_usdc_adapter = "MarginfiAdpt11111111111111111111111111111"
-jupiter_lp_adapter = "JupiterAdpt1111111111111111111111111111111"
-maple_syrup_adapter = "MapleAdpt111111111111111111111111111111111"
-drift_insurance_adapter = "DriftAdpt111111111111111111111111111111111"
+yield_dispatcher = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+adapter_registry = "SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH"
+kamino_usdc_adapter = "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+marginfi_usdc_adapter = "4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA"
+jupiter_lp_adapter = "7xKXtg2CW87d97TXJSDpbN5jPidns1G1dvWodJWdqbF9"
+maple_syrup_adapter = "9W52Y2gZonevPaFwN98mD3A9wLYs7uVebT6f7vSu7qfE"
+drift_insurance_adapter = "MNDEFsaZbJv516pvc64Jv9wzN7v56mSuaKEx8Gr8R6f"
 
 [registry]
 url = "https://api.apr.dev"
@@ -49,7 +49,7 @@ address = "7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"
 [[test.validator.clone]]
 address = "D6q6wuQSriferjmtEkLeX43LchH4ix3raHmkX9W3LQba"
 [[test.validator.clone]]
-address = "FBSyPnxtHKLBZ4UeeUyAnbtFuAmTHLtso9YtsqRDRWkB"
+address = "FBSyPnxtHKLBZ4UeeUyAnbtFuAnbtFuAmTHLtso9YtsqRDRWkB"
 [[test.validator.clone]]
 address = "MFv2hWf31Z9kbCa1snEPdcgX6CAm7cDpSvtVkGX3H5a"
 [[test.validator.clone]]
