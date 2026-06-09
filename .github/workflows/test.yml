@@ -50,30 +50,40 @@ jobs:
           # 1. Замінюємо лінк на твій Helius RPC в Anchor.toml
           sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
           
-          # 2. Розумна заміна за префіксами у коді та конфігах
-          for item in \
-            "YieLdDiSPaTcHeRvAuLt:Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" \
-            "AdPtReGiStRy:SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH" \
-            "KAdPtKAmInOUSDC:Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB" \
-            "MAdPtMaRGInFiUSDC:4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA" \
-            "JAdPtJuPiTeRLP:7xKXtg2CW87d97TXJSDpbN5jPidns1G1dvWodJWdqbF9" \
-            "MAdPtMaPlEsYrUp:9W52Y2gZonevPaFwN98mD3A9wLYs7uVebT6f7vSu7qfE" \
-            "DAdPtDrIfTiNsFuNd:MNDEFsaZbJv516pvc64Jv9wzN7v56mSuaKEx8Gr8R6f"
-          do
-            PREFIX=$(echo "$item" | cut -d':' -f1)
-            TO=$(echo "$item" | cut -d':' -f2)
-            
-            find programs/ -name "*.rs" -exec sed -i -E "s|${PREFIX}[a-zA-Z0-9]*|${TO}|g" {} +
-            sed -i -E "s|${PREFIX}[a-zA-Z0-9]*|${TO}|g" Anchor.toml
+          # 2. Ліквідація 50-значного монстра в списку клонів validator
+          sed -i 's|FBSyPnxtHKLBZ4UeeUyAnbtFuAmTHLtso9YtsqRDRWkB|Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS|g' Anchor.toml
+
+          # 3. ДІАГНОСТИКА ДО: Показуємо, які адреси зараз прописані в смарт-контрактах
+          echo "=== ДІАГНОСТИКА: Початкові адреси в коді контракту ==="
+          find programs/ -name "*.rs" -exec grep -H "declare_id!" {} \; || true
+          echo "=============================================="
+
+          # 4. БРОНЕБІЙНА заміна за назвою папок програм
+          for dir in programs/*; do
+            if [ -d "$dir" ]; then
+              prog_name=$(basename "$dir")
+              case "$prog_name" in
+                yield_dispatcher) TO="Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" ;;
+                adapter_registry) TO="SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH" ;;
+                kamino_usdc_adapter) TO="Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB" ;;
+                marginfi_usdc_adapter) TO="4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA" ;;
+                jupiter_lp_adapter) TO="7xKXtg2CW87d97TXJSDpbN5jPidns1G1dvWodJWdqbF9" ;;
+                maple_syrup_adapter) TO="9W52Y2gZonevPaFwN98mD3A9wLYs7uVebT6f7vSu7qfE" ;;
+                drift_insurance_adapter) TO="MNDEFsaZbJv516pvc64Jv9wzN7v56mSuaKEx8Gr8R6f" ;;
+                *) TO="Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" ;;
+              esac
+              
+              # Зачищаємо будь-який вміст declare_id і ставимо ідеальну адресу
+              if [ -f "$dir/src/lib.rs" ]; then
+                sed -i -E "s|declare_id!\s*\(\s*\"[^\"]+\"\s*\);?|declare_id!(\"${TO}\");|g" "$dir/src/dir/../src/lib.rs" || sed -i -E "s|declare_id!\s*\(\s*\"[^\"]+\"\s*\);?|declare_id!(\"${TO}\");|g" "$dir/src/lib.rs"
+              fi
+            fi
           done
 
-          # 3. ЛІКВІДАЦІЯ 50-значного монстра в списку клонів validator
-          sed -i 's|FBSyPnxtHKLBZ4UeeUyAnbtFuAnbtFuAmTHLtso9YtsqRDRWkB|Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS|g' Anchor.toml
-
-          # 4. ДІАГНОСТИКА: перевіряємо, чи зникла помилка з Anchor.toml
-          echo "=== ПЕРЕВІРКА ВМІСТУ Anchor.toml ПІСЛЯ ЗАМІНИ ЗЛАМАНОЇ КЛОН-АДРЕСИ ==="
-          cat Anchor.toml
-          echo "======================================"
+          # 5. ДІАГНОСТИКА ПІСЛЯ: Перевіряємо, чи успішно пройшла заміна
+          echo "=== ДІАГНОСТИКА: Оновлені адреси в коді (мають бути чисті ключі) ==="
+          find programs/ -name "*.rs" -exec grep -H "declare_id!" {} \; || true
+          echo "=============================================="
           
-          # 5. Запускаємо тест
+          # 6. Запускаємо самі тести
           anchor test
