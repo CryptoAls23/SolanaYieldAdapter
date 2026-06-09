@@ -82,3 +82,21 @@ export const DRIFT_IF_VAULT = new PublicKey(
   "USDRm8LfUNNYmJAtFgvE3aqr3cxnxEPpEVEUf3G8Hjf"
 );
 export const DRIFT_USDC_SPOT_MARKET = new PublicKey(
+  "2t4mne3fsVjRwgTsv4FnAMn36JC93jukwAmpzhydmkEm"
+);
+
+export const SEEDS = {
+  DISPATCHER_CONFIG: Buffer.from("dispatcher_config"),
+  DISPATCHER_AUTHORITY: Buffer.from("dispatcher_authority"),
+  ADAPTER_STATE: Buffer.from("adapter_state"),
+  POSITION: Buffer.from("position"),
+  REGISTRY_CONFIG: Buffer.from("registry_config"),
+  ADAPTER_ENTRY: Buffer.from("adapter_entry"),
+} as const;
+
+export const ADAPTER_STATUS = {
+  PENDING: 0,
+  ACTIVE: 1,
+  DEPRECATED: 2,
+  REJECTED: 3,
+} as const;
