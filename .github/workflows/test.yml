@@ -47,12 +47,23 @@ jobs:
 
       - name: Run Mainnet-Fork Tests
         run: |
-          # 1. Лінк на Helius RPC в Anchor.toml
+          # 1. Замінюємо лінк на твій Helius RPC в Anchor.toml
           sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
           
-          # 2. Замінюєм зламані текстові заглушки в усіх Rust-файлах контракту на валідні адреси
-          find programs/ -name "*.rs" -exec sed -i 's|YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX|Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS|g' {} +
-          find programs/ -name "*.rs" -exec sed -i 's|AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH|g' {} +
-          find programs/ -name "*.rs" -exec sed -i 's|KAdPtKAmInOUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXXX|Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB|g' {} +
-          find programs/ -name "*.rs" -exec sed -i 's|MAdPtMaRGInFiUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXX|4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA|g' {} +
-          find programs/ -name "*.rs" -exec sed -i 's|JAdPtJuPiTeRLPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|7xKXtg2CW87d97TXJSDpbN5jPidns1G1dv
+          # 2. Безпечний цикл заміни заглушок (захищений від розривів рядків)
+          for item in \
+            "YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX:Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" \
+            "AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH" \
+            "KAdPtKAmInOUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXXX:Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB" \
+            "MAdPtMaRGInFiUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXX:4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA" \
+            "JAdPtJuPiTeRLPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:7xKXtg2CW87d97TXJSDpbN5jPidns1G1dvWodJWdqbF9" \
+            "MAdPtMaPlEsYrUpXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:9W52Y2gZonevPaFwN98mD3A9wLYs7uVebT6f7vSu7qfE" \
+            "DAdPtDrIfTiNsFuNdXXXXXXXXXXXXXXXXXXXXXXXXXXX:MNDEFsaZbJv516pvc64Jv9wzN7v56mSuaKEx8Gr8R6f"
+          do
+            FROM=$(echo "$item" | cut -d':' -f1)
+            TO=$(echo "$item" | cut -d':' -f2)
+            find programs/ -name "*.rs" -exec sed -i "s|$FROM|$TO|g" {} +
+          done
+          
+          # 3. Запускаємо тест
+          anchor test
