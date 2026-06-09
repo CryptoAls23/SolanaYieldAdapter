@@ -46,6 +46,7 @@ jobs:
         run: yarn install
 
       - name: Run Mainnet-Fork Tests
-        env:
-          ANCHOR_PROVIDER_URL: ${{ secrets.SOLANA_RPC_URL }}
-        run: anchor test
+        run: |
+          # Магія: замінюємо публічний лінк у файлі Anchor.toml на твій секретний Helius RPC перед стартом тесту
+          sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
+          anchor test
