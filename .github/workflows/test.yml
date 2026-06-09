@@ -50,23 +50,29 @@ jobs:
           # 1. Замінюємо лінк на твій Helius RPC в Anchor.toml
           sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
           
-          # 2. Цикл заміни заглушок в УСІХ файлах (і в коді, і в конфігу Anchor.toml)
+          # 2. Розумна заміна за префіксами (ігнорує кількість "X" на кінці)
           for item in \
-            "YieLdDiSPaTcHeRvAuLtXXXXXXXXXXXXXXXXXXXXXXX:Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" \
-            "AdPtReGiStRyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH" \
-            "KAdPtKAmInOUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXXX:Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB" \
-            "MAdPtMaRGInFiUSDCXXXXXXXXXXXXXXXXXXXXXXXXXXX:4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA" \
-            "JAdPtJuPiTeRLPXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:7xKXtg2CW87d97TXJSDpbN5jPidns1G1dvWodJWdqbF9" \
-            "MAdPtMaPlEsYrUpXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:9W52Y2gZonevPaFwN98mD3A9wLYs7uVebT6f7vSu7qfE" \
-            "DAdPtDrIfTiNsFuNdXXXXXXXXXXXXXXXXXXXXXXXXXXX:MNDEFsaZbJv516pvc64Jv9wzN7v56mSuaKEx8Gr8R6f"
+            "YieLdDiSPaTcHeRvAuLt:Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" \
+            "AdPtReGiStRy:SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH" \
+            "KAdPtKAmInOUSDC:Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB" \
+            "MAdPtMaRGInFiUSDC:4k3DyjzvN88Zb2xchatbbBj9C1ldQ7CycWLYg1fF24gA" \
+            "JAdPtJuPiTeRLP:7xKXtg2CW87d97TXJSDpbN5jPidns1G1dvWodJWdqbF9" \
+            "MAdPtMaPlEsYrUp:9W52Y2gZonevPaFwN98mD3A9wLYs7uVebT6f7vSu7qfE" \
+            "DAdPtDrIfTiNsFuNd:MNDEFsaZbJv516pvc64Jv9wzN7v56mSuaKEx8Gr8R6f"
           do
-            FROM=$(echo "$item" | cut -d':' -f1)
+            PREFIX=$(echo "$item" | cut -d':' -f1)
             TO=$(echo "$item" | cut -d':' -f2)
-            # Чистимо всередині Rust-файлів
-            find programs/ -name "*.rs" -exec sed -i "s|$FROM|$TO|g" {} +
-            # Обов'язково чистимо всередині Anchor.toml
-            sed -i "s|$FROM|$TO|g" Anchor.toml
+            
+            # Заміна в Rust-коді
+            find programs/ -name "*.rs" -exec sed -i -E "s|${PREFIX}[a-zA-Z0-9]*|${TO}|g" {} +
+            # Заміна в Anchor.toml
+            sed -i -E "s|${PREFIX}[a-zA-Z0-9]*|${TO}|g" Anchor.toml
           done
+
+          # 3. ДІАГНОСТИКА: виводимо фінальний Anchor.toml в логи, щоб ми точно бачили, що всередині
+          echo "=== ДІАГНОСТИКА ВМІСТУ Anchor.toml ==="
+          cat Anchor.toml
+          echo "======================================"
           
-          # 3. Запускаємо тест
+          # 4. Запускаємо тест
           anchor test
