@@ -1,0 +1,40 @@
+name: Solana Integration Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # Дозволяє запускати тести вручну кнопкою
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Solana CLI (2.2.20)
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/v2.2.20/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Install Anchor CLI (0.31.1)
+        run: |
+          curl -L https://github.com/coral-xyz/anchor/releases/download/v0.31.1/anchor-cli-v0.31.1-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          sudo mv anchor /usr/local/bin/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run Mainnet-Fork Tests
+        env:
+          ANCHOR_PROVIDER_URL: ${{ secrets.SOLANA_RPC_URL }}
+        run: anchor test
