@@ -24,11 +24,6 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install Solana CLI (2.2.20)
-        run: |
-          sh -c "$(curl -sSfL https://release.solana.com/v2.2.20/install)"
-          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
-
       - name: Install Anchor CLI via AVM (0.31.1)
         run: |
           cargo install --git https://github.com/coral-xyz/anchor avm --locked
@@ -47,9 +42,9 @@ jobs:
 
       - name: Run Mainnet-Fork Tests
         run: |
-          # 1. Створюємо реальний локальний гаманець, щоб Anchor не скаржився на його відсутність
+          # 1. Створюємо реальний валідний локальний гаманець без використання solana-keygen
           mkdir -p ~/.config/solana
-          $HOME/.local/share/solana/install/active_release/bin/solana-keygen new --no-bip39-passphrase --force
+          echo "[126,62,23,164,246,99,247,128,240,142,112,68,99,179,112,199,239,169,60,152,37,199,69,83,217,41,31,249,100,74,203,113,189,6,176,218,210,214,69,13,83,135,212,87,140,3,104,94,86,50,92,148,23,66,39,50,225,170,184,7,199,91,86,240]" > ~/.config/solana/id.json
 
           # 2. Замінюємо лінк на твій Helius RPC в Anchor.toml
           sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
@@ -84,5 +79,5 @@ jobs:
           find programs/ -name "*.rs" -exec grep -H "declare_id!" {} \; || true
           echo "=============================================="
           
-          # 6. Запуск тестів
+          # 6. Запуск тестів (Anchor сам скачає Agave 2.2.20)
           anchor test
