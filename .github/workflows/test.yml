@@ -47,6 +47,6 @@ jobs:
 
       - name: Run Mainnet-Fork Tests
         run: |
-          # Магія: замінюємо публічний лінк у файлі Anchor.toml на твій секретний Helius RPC перед стартом тесту
           sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
+          anchor keys sync
           anchor test
