@@ -50,7 +50,7 @@ jobs:
           # 1. Замінюємо лінк на твій Helius RPC в Anchor.toml
           sed -i 's|https://api.mainnet-beta.solana.com|${{ secrets.SOLANA_RPC_URL }}|g' Anchor.toml
           
-          # 2. Розумна заміна за префіксами (ігнорує кількість "X" на кінці)
+          # 2. Розумна заміна за префіксами у коді та конфігах
           for item in \
             "YieLdDiSPaTcHeRvAuLt:Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS" \
             "AdPtReGiStRy:SRMuS5Pqnmksuiw7e3E9V6zpPgB5v6E9bS4w9cgZ7vH" \
@@ -63,16 +63,17 @@ jobs:
             PREFIX=$(echo "$item" | cut -d':' -f1)
             TO=$(echo "$item" | cut -d':' -f2)
             
-            # Заміна в Rust-коді
             find programs/ -name "*.rs" -exec sed -i -E "s|${PREFIX}[a-zA-Z0-9]*|${TO}|g" {} +
-            # Заміна в Anchor.toml
             sed -i -E "s|${PREFIX}[a-zA-Z0-9]*|${TO}|g" Anchor.toml
           done
 
-          # 3. ДІАГНОСТИКА: виводимо фінальний Anchor.toml в логи, щоб ми точно бачили, що всередині
-          echo "=== ДІАГНОСТИКА ВМІСТУ Anchor.toml ==="
+          # 3. ЛІКВІДАЦІЯ 50-значного монстра в списку клонів validator
+          sed -i 's|FBSyPnxtHKLBZ4UeeUyAnbtFuAnbtFuAmTHLtso9YtsqRDRWkB|Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS|g' Anchor.toml
+
+          # 4. ДІАГНОСТИКА: перевіряємо, чи зникла помилка з Anchor.toml
+          echo "=== ПЕРЕВІРКА ВМІСТУ Anchor.toml ПІСЛЯ ЗАМІНИ ЗЛАМАНОЇ КЛОН-АДРЕСИ ==="
           cat Anchor.toml
           echo "======================================"
           
-          # 4. Запускаємо тест
+          # 5. Запускаємо тест
           anchor test
